@@ -1,0 +1,347 @@
+<!--
+	此示例下载自 https://echarts.apache.org/examples/zh/editor.html?c=scatter3D-dataset&gl=1
+-->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+<title>七鳃鳗3D脑图谱bycdy</title>
+  <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+
+  <div id="container" style="height: 100%"></div>
+  <div id="rangeInputContainer" style="position: absolute; bottom: 45%; right: 35%;">
+    <label for="yMin">Y Min:</label>
+    <input type="number" id="yMin" value="4" min="0" max="8" step="0.2">
+    <label for="yMax">Y Max:</label>
+    <input type="number" id="yMax" value="5" min="0" max="8" step="0.2">
+    <button id="applyRangeButton">Apply Range</button>
+  </div>
+  <div id="rangeInputContainer2" style="position: absolute; bottom: 45%; right: 2%;">
+    <label for="xMin">X Min:</label>
+    <input type="number" id="xMin" value="6" min="0" max="50" step="0.01">
+    <label for="xMax">X Max:</label>
+    <input type="number" id="xMax" value="7" min="0" max="50" step="0.01">
+    <button id="applyRangeButton2">Apply Range</button>
+  </div>
+  <div id="search-container" style="position: absolute; top: 10px; left: 10px;">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <button id="searchButton">Search</button>
+  </div>
+
+
+  <script type="text/javascript" src="https://registry.npmmirror.com/jquery/3.7.1/files/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/echarts.min.js"></script>
+  
+
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/extension/dataTool.min.js"></script>
+
+
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-gl/2/files/dist/echarts-gl.js"></script>
+
+
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-stat/latest/files/dist/ecStat.min.js"></script>
+
+
+  <script type="text/javascript" src="https://registry.npmmirror.com/echarts-graph-modularity/2/files/dist/echarts-graph-modularity.min.js"></script>
+
+
+
+  <script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'webgl', // Try using WebGL renderer
+      useDirtyRect: true,
+      //updateHostOnMouseMove: true // Force DOM updates on mouse move
+    });
+    var schema = [
+  { name: 'name', index: 0 },
+  { name: 'group', index: 1 },
+  { name: 'protein', index: 2 },
+  { name: 'calcium', index: 3 },
+  { name: 'sodium', index: 4 },
+  { name: 'fiber', index: 5 },
+  { name: 'vitaminc', index: 6 },
+  { name: 'potassium', index: 7 },
+  { name: 'carbohydrate', index: 8 },
+  { name: 'sugars', index: 9 },
+  { name: 'fat', index: 10 },
+  { name: 'water', index: 11 },
+  { name: 'calories', index: 12 },
+  { name: 'saturated', index: 13 },
+  { name: 'monounsat', index: 14 },
+  { name: 'polyunsat', index: 15 },
+  { name: 'id', index: 16 }
+];
+
+var fieldIndices = schema.reduce(function (obj, item) {
+  obj[item.name] = item.index;
+  return obj;
+}, {});
+    var app = {};
+    var option;
+    myChart.showLoading();
+    function mergeTables(table1, table2) { 
+     const mergedTable = table1.map((row, index) => { return [...row, ...table2[index]]; }); return mergedTable; };
+    $.get('les.sp.echarts.onlycelltype.json',function (data) {
+    myChart.hideLoading();
+    var symbolSize = 2;
+    var sizeValue = '55%';
+    var yMin = 4;
+    var yMax = 5;
+    var xMin = 6;
+    var xMax = 7;
+    option = {
+      grid3D: {
+      boxWidth: 400,
+      boxHeight:120,
+      boxDepth: 80,
+      //environment: '#000',
+      height: '50%',
+      toolbox: {
+        top: '70%',
+        feature: {
+        dataZoom: {
+        },
+        restore: {},
+        saveAsImage: {}
+      }},
+      viewControl: {
+      autoRotate: true,
+          projection: 'orthographic'
+      },
+       light: {
+            main: {
+              ambient: 0.1,
+              diffuse: 0.8,
+              specular: 0.5,
+              shadow: true
+            }
+          }
+      },
+      xAxis3D: { 
+      type: 'value',
+      min:0,
+      max:50,
+      alignTicks: true,
+      
+            },
+      yAxis3D: {
+      type: 'value',
+      min:0,
+      max:10
+            },
+      zAxis3D: {
+      type: 'value',
+      min:0,
+      max:15
+      },
+      grid: [
+        { left: '10%', width: 1000, height:300, top: sizeValue },
+        { left: '80%',width: 200, height:300, top: sizeValue },
+
+      ],
+      tooltip: {
+          },
+
+         xAxis: [
+        {
+          type: 'value',
+          gridIndex: 0,
+          name: 'x',
+          axisLabel: { rotate: 50, interval: 0 }
+        },
+        {
+          type: 'value',
+          gridIndex: 1,
+          name: 'y',
+          axisLabel: { rotate: 50, interval: 0 }
+        }
+      ],
+            yAxis: [
+        { type: 'value', gridIndex: 0, name: 'z' },
+        { type: 'value', gridIndex: 1, name: 'z' ,      
+        min:0,
+        max:15}
+      ],
+        
+
+      dataset: [
+      {
+        sourceHeader: true,
+        source: data
+      },
+      {
+      transform: {
+        type: 'filter',
+        config: { dimension: 'y', '<': yMax , '>':yMin}
+          }
+          },
+          
+      {
+      transform: {
+        type: 'filter',
+        config: { dimension: 'x', '<': xMax, '>':xMin}
+          }
+          },
+                {
+        sourceHeader: true,
+        source: data.filter((_, i) => i % 5 === 0)
+      }
+
+      ],
+      series: [
+        {
+          type: 'scatter3D',
+          symbolSize: 3,
+          sampling: "lttb", 
+          animation : false,
+          datasetIndex: 3,
+          progressiveThreshold:100000,
+          progressive:50000,
+          shading: 'phong',
+          encode: {
+            x: 'x',
+            y: 'y',
+            z: 'z',
+            color: 'region',
+            tooltip: [0,1,2,3,4]
+
+          }
+        },
+        {
+          type: 'scatter',
+          symbolSize: 1.5,
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          datasetIndex: 1,
+          sampling: "lttb", 
+          samplingThreshold: 2000,
+          progressiveThreshold:10000,
+          progressive:50000,
+          encode: {
+            x: 'x',
+            y: 'z',
+            color: 'region',
+            tooltip: [1, 0, 3,4]
+          }
+        },
+        {
+          type: 'scatter',
+          symbolSize: symbolSize,
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          datasetIndex: 2,
+          sampling: "lttb", 
+          progressiveThreshold:10000,
+          progressive:50000,
+          encode: {
+            x: 'y',
+            y: 'z',
+            color: 'region',
+            tooltip: [2, 0, 3, 4]
+          }
+        }
+      ],
+        visualMap: [
+
+        {
+        right: 20,
+        top: 10,
+        type: 'piecewise',
+        calculable: true,
+        dimension: 'region',
+        selected: {
+        "Non-neuron": false
+        },
+        categories: ["Cerebellum","Diencephalon","Mesencephalon","Non-neuron","Rhombencephalon","Telencephalon"],
+        inRange: {color: ["#962495","#F3D80F","#0072BF","#4B4B4B","#BF0B61","#C1272E"]},
+        textStyle: {
+          //color: '#fff'
+        }
+        }
+        ],
+        dataZoom: [
+        {
+          type: 'slider',
+          xAxisIndex: 1,
+          start: 0,
+          end: 100
+        },
+                {
+          type: 'slider',
+          xAxisIndex: 0,
+          start: 0,
+          end: 100
+        },
+        {
+          type: 'slider',
+          yAxisIndex: [0,1],
+          start: 0,
+          end: 100
+        },
+
+        {
+          type: 'inside',
+          xAxisIndex: 0,
+          start: 0,
+          end: 100
+        },
+        {
+          type: 'inside',
+          yAxisIndex: 0,
+          start: 0,
+          end: 10
+        }
+      ],
+    };
+    myChart.setOption(option);
+      $('#applyRangeButton').on('click', function () {
+        yMin = parseFloat($('#yMin').val());
+        yMax = parseFloat($('#yMax').val());
+        // 更新配置
+        option.dataset[1].transform.config = { dimension: 'y', '<': yMax, '>': yMin };
+        myChart.setOption(option);
+      });
+
+      $('#applyRangeButton2').on('click', function () {
+        xMin = parseFloat($('#xMin').val());
+        xMax = parseFloat($('#xMax').val());
+        // 更新配置
+        option.dataset[2].transform.config = { dimension: 'x', '<': xMax, '>': xMin };
+        myChart.setOption(option);
+      });
+      $('#searchButton').on('click', function () {
+        searchTerm = $('#searchInput').val();
+        var filePath = 'gene_json/gene_json/'+searchTerm + '.json';
+        $.getJSON(filePath, function (geneData) {
+        var maxExpression = Math.max.apply(null,geneData.slice(1).map(Number).filter(function(value) {
+        return value !== 0;
+    })); 
+        console.log(maxExpression);
+        option.visualMap[0].max = maxExpression;
+        option.dataset[0].source = mergeTables(option.dataset[0].source,geneData);
+        option.dataset[3].source = mergeTables(option.dataset[0].source,geneData).filter((_, i) => i % 5 === 0);
+        option.visualMap[0].type = 'continuous';
+        option.visualMap[0].realtime = false;
+        option.visualMap[0].itemWidth = 40;
+        option.visualMap[0].itemHeight = 200;
+        option.visualMap[0].dimension = searchTerm;
+        option.visualMap[0].inRange.color= ['#478CCF','#FBA834','#F5004F','#A02334'];
+        option.visualMap[0].inRange.colorAlpha = [0.3, 1];
+        option.visualMap[0].inRange.symbolSize = [0.5, 5];
+        myChart.setOption(option); // 更新图表配置
+        })
+      });
+    });
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+  }
+
+
+
+
+    window.addEventListener('resize', myChart.resize);
+  </script>
+</body>
+</html>

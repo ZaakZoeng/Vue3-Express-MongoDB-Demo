@@ -22,7 +22,7 @@ const isDark = ref(useDark());
         </div>
         <div class="footer-wrap-flex-grow"></div>
         <div class="footer-wrap-text">
-          <div>© 2023. Powered by <a href="https://www.parallellight.com/" target="_blank">Ze Zhang</a></div>
+          <div>© 2023. Powered by <a href="https://zaakzoeng.github.io/" target="_blank">Ze Zhang</a></div>
         </div>
       </el-menu>
       <!-- Mobile-Footer -->
@@ -37,7 +37,7 @@ const isDark = ref(useDark());
           </a>
         </div>
         <div class="mobile-footer-wrap-text">
-          <div>© 2023. Powered by <a href="https://www.parallellight.com/" target="_blank">Ze Zhang</a></div>
+          <div>© 2023. Powered by <a href="https://zaakzoeng.github.io/" target="_blank">Ze Zhang</a></div>
         </div>
       </div>
     </el-col>

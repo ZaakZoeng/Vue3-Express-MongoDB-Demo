@@ -4,7 +4,7 @@ import { useDark } from "@vueuse/core"; // 引入暗黑模式
 
 const isDark = ref(useDark());
 const contact = reactive({
-  map: "/api/Map.html"
+  map: "/api/htmls/Map.html"
 })
 
 const screenWidth = ref();
@@ -24,8 +24,8 @@ onMounted(() => {
       <el-col :span="20">
         <el-row>
           <el-col class="wrapper-sketch-text" :span="screenWidth > 1200 ? 14 : 24">
-            <div class="wrapper-sketch-text-title">About</div>
-            <div class="wrapper-sketch-text-subtitle">The Page of About</div>
+            <div class="wrapper-sketch-text-title">About Me</div>
+            <div class="wrapper-sketch-text-subtitle">This is Ze Zhang</div>
             <h1 class="wrapper-sketch-text-content">You can contact me.</h1>
           </el-col>
         </el-row>

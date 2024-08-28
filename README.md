@@ -1,15 +1,17 @@
 # Vue3-Express-MongoDB-Demo
 
-## project-api
-```
-cd project-api
-npm start
-```
-
 ## project-web
 ```
 cd project-web
 npm install
+npm run dev
+```
+
+## project-api
+```
+cd project-api
+npm install nodemon -S
+npm start
 ```
 
 ## Components
